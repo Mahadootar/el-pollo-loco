@@ -1,6 +1,8 @@
 class Character extends MoveableObject {
   y = 140;
   height = 300;
+  world;
+  speed = 5;
   IMAGES_WALIKNG = [
     "../img/2_character_pepe/2_walk/W-21.png",
     "../img/2_character_pepe/2_walk/W-22.png",
@@ -18,10 +20,22 @@ class Character extends MoveableObject {
 
   animate() {
     setInterval(() => {
-      let i = this.currentImage % this.IMAGES_WALIKNG.length;
-      let path = this.IMAGES_WALIKNG[i];
-      this.img = this.imageCatch[path];
-      this.currentImage++;
-    }, 100);
+      if (this.world.keyboard.RIGHT) {
+        this.x += this.speed;
+      }
+
+      if (this.world.keyboard.LEFT) {
+        this.x -= this.speed;
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        let i = this.currentImage % this.IMAGES_WALIKNG.length;
+        let path = this.IMAGES_WALIKNG[i];
+        this.img = this.imageCatch[path];
+        this.currentImage++;
+      }
+    }, 50);
   }
 }

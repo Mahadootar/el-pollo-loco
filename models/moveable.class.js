@@ -8,6 +8,7 @@ class MoveableObject {
   currentImage = 0;
   speed = 0.15;
   otherDirection = false;
+
   loadImage(path) {
     this.img = new Image();
     this.img.src = path;
@@ -25,5 +26,12 @@ class MoveableObject {
     setInterval(() => {
       this.x -= this.speed;
     }, 1000 / 60);
+  }
+
+  playImagesWalkingAnimation(images) {
+    let i = this.currentImage % this.IMAGES_WALIKNG.length;
+    let path = images[i];
+    this.img = this.imageCatch[path];
+    this.currentImage++;
   }
 }

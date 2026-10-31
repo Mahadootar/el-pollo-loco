@@ -29,7 +29,7 @@ class MoveableObject {
   }
 
   playImagesWalkingAnimation(images) {
-    let i = this.currentImage % this.IMAGES_WALIKNG.length;
+    let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCatch[path];
     this.currentImage++;

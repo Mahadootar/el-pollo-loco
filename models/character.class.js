@@ -3,6 +3,12 @@ class Character extends MoveableObject {
   height = 300;
   world;
   speed = 5;
+  offset = {
+    top: 120,
+    bottom: 40,
+    right: 30,
+    left: 40,
+  };
   IMAGES_WALIKNG = [
     "../img/2_character_pepe/2_walk/W-21.png",
     "../img/2_character_pepe/2_walk/W-22.png",

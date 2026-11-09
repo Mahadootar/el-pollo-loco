@@ -1,11 +1,4 @@
-class MoveableObject {
-  x = 120;
-  y = 280;
-  img;
-  height = 150;
-  width = 100;
-  imageCatch = {};
-  currentImage = 0;
+class MoveableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
   speedY = 0;
@@ -32,15 +25,6 @@ class MoveableObject {
     return this.y < 140;
   }
 
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
-
   drawFrame(ctx) {
     if (this instanceof Character || this instanceof Chicken) {
       ctx.beginPath();
@@ -54,14 +38,6 @@ class MoveableObject {
       );
       ctx.stroke();
     }
-  }
-
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCatch[path] = img;
-    });
   }
 
   hit() {

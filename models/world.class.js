@@ -8,6 +8,7 @@ class World {
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
   collectedCoins = 0;
+  totalCoins = this.level.coins.length;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -17,6 +18,7 @@ class World {
     this.setWorld();
     this.checkCollisions();
     this.checkCoinCollision();
+    console.log(this.totalCoins);
   }
 
   setWorld() {
@@ -61,8 +63,9 @@ class World {
           console.log("coins berührt", this.collectedCoins);
           this.collectedCoins++;
           this.level.coins.splice(index, 1);
-
-          this.level.coins.setPercentage(this.collectedCoins);
+          this.coinBar.setPercentage(
+            (this.collectedCoins / this.totalCoins) * 100,
+          );
         }
       });
     }, 100);

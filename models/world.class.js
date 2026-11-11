@@ -7,6 +7,7 @@ class World {
   camera_x = 0;
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
+  collectedCoins = 0;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -15,6 +16,7 @@ class World {
     this.draw();
     this.setWorld();
     this.checkCollisions();
+    this.checkCoinCollision();
   }
 
   setWorld() {
@@ -47,10 +49,23 @@ class World {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
           this.healthBar.setPercentage(this.character.energy);
-          this.coinBar.setPercentage(this.coins);
         }
       });
     }, 1000);
+  }
+
+  checkCoinCollision() {
+    setInterval(() => {
+      this.level.coins.forEach((coin, index) => {
+        if (this.character.isColliding(coin)) {
+          console.log("coins berührt", this.collectedCoins);
+          this.collectedCoins++;
+          this.level.coins.splice(index, 1);
+
+          this.level.coins.setPercentage(this.collectedCoins);
+        }
+      });
+    }, 100);
   }
 
   addObjectsToMap(objects) {

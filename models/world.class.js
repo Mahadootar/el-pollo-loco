@@ -7,7 +7,7 @@ class World {
   camera_x = 0;
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
-  throwableObjects = [new ThrowableObject()];
+  throwableObjects = [];
   collectedCoins = 0;
   totalCoins = this.level.coins.length;
 
@@ -17,7 +17,7 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.run();
     this.checkCoinCollision();
     console.log(this.totalCoins);
   }
@@ -33,12 +33,12 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMapp(this.healthBar);
     this.addToMapp(this.coinBar);
-    this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(this.camera_x, 0);
     this.addToMapp(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_x, 0);
 
     let self = this;
@@ -47,15 +47,27 @@ class World {
     });
   }
 
-  checkCollisions() {
+  run() {
     setInterval(() => {
-      this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-          this.character.hit();
-          this.healthBar.setPercentage(this.character.energy);
-        }
-      });
+      this.checkCollisions();
+      this.checkThrowableObject();
     }, 1000);
+  }
+
+  checkThrowableObject() {
+    if (this.keyboard.D) {
+      let bottle = new ThrowableObject(this.character.x, this.character.y);
+      this.throwableObjects.push(bottle);
+    }
+  }
+
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy)) {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
+      }
+    });
   }
 
   checkCoinCollision() {

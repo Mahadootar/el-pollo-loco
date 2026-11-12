@@ -7,6 +7,7 @@ class World {
   camera_x = 0;
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
+  throwableObjects = [new ThrowableObject()];
   collectedCoins = 0;
   totalCoins = this.level.coins.length;
 
@@ -32,6 +33,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMapp(this.healthBar);
     this.addToMapp(this.coinBar);
+    this.addObjectsToMap(this.throwableObjects);
     this.ctx.translate(this.camera_x, 0);
     this.addToMapp(this.character);
     this.addObjectsToMap(this.level.clouds);

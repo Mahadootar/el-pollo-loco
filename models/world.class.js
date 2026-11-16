@@ -7,9 +7,11 @@ class World {
   camera_x = 0;
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
+  bottleBar = new StatusBottlesBar();
   throwableObjects = [];
   collectedCoins = 0;
   totalCoins = this.level.coins.length;
+  totalBottles = this.level.bottles.length;
   collectedBottles = 0;
 
   constructor(canvas, keyboard) {
@@ -35,6 +37,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.addToMapp(this.healthBar);
     this.addToMapp(this.coinBar);
+    this.addToMapp(this.bottleBar);
     this.ctx.translate(this.camera_x, 0);
     this.addToMapp(this.character);
     this.addObjectsToMap(this.level.clouds);
@@ -58,9 +61,10 @@ class World {
   }
 
   checkThrowableObject() {
-    if (this.keyboard.D) {
+    if (this.keyboard.D && this.collectedBottles > 0) {
       let bottle = new ThrowableObject(this.character.x, this.character.y);
       this.throwableObjects.push(bottle);
+      this.collectedBottles--;
     }
   }
 
@@ -94,6 +98,9 @@ class World {
         if (this.character.isColliding(bottle)) {
           this.collectedBottles++;
           this.level.bottles.splice(index, 1);
+          this.bottleBar.setPercentage(
+            (this.collectedBottles / this.totalBottles) * 100,
+          );
         }
       });
     }, 100);

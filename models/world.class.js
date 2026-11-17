@@ -56,8 +56,10 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
+    }, 50);
+    setInterval(() => {
       this.checkThrowableObject();
-    }, 1000);
+    }, 200);
   }
 
   checkThrowableObject() {
@@ -65,14 +67,23 @@ class World {
       let bottle = new ThrowableObject(this.character.x, this.character.y);
       this.throwableObjects.push(bottle);
       this.collectedBottles--;
+      this.bottleBar.setPercentage(
+        (this.collectedBottles / this.totalBottles) * 100,
+      );
     }
   }
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.healthBar.setPercentage(this.character.energy);
+        if (this.character.isAboveGround() && this.character.speedY < 0) {
+          console.log("chicken besiegt");
+        } else {
+          if (this.character.isHurt()) {
+            this.character.hit();
+            this.healthBar.setPercentage(this.character.energy > 0);
+          }
+        }
       }
     });
   }

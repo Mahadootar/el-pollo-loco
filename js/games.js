@@ -7,54 +7,25 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+const KEYS = {
+  39: "RIGHT",
+  37: "LEFT",
+  32: "SPACE",
+  38: "UP",
+  40: "DOWN",
+  68: "D",
+};
+
 window.addEventListener("keydown", (e) => {
-  if (e.keyCode == 39) {
-    keyboard.RIGHT = true;
-  }
-
-  if (e.keyCode == 37) {
-    keyboard.LEFT = true;
-  }
-
-  if (e.keyCode == 32) {
-    keyboard.SPACE = true;
-  }
-
-  if (e.keyCode == 38) {
-    keyboard.UP = true;
-  }
-
-  if (e.keyCode == 40) {
-    keyboard.DOWN = true;
-  }
-
-  if (e.keyCode == 68) {
-    keyboard.D = true;
+  let name = KEYS[e.keyCode];
+  if (name) {
+    keyboard[name] = true;
   }
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.keyCode == 39) {
-    keyboard.RIGHT = false;
-  }
-
-  if (e.keyCode == 37) {
-    keyboard.LEFT = false;
-  }
-
-  if (e.keyCode == 32) {
-    keyboard.SPACE = false;
-  }
-
-  if (e.keyCode == 38) {
-    keyboard.UP = false;
-  }
-
-  if (e.keyCode == 40) {
-    keyboard.DOWN = false;
-  }
-
-  if (e.keyCode == 68) {
-    keyboard.D = false;
+  let name = KEYS[e.keyCode];
+  if (name) {
+    keyboard[name] = false;
   }
 });

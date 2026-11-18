@@ -77,11 +77,11 @@ class World {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         if (this.character.isAboveGround() && this.character.speedY < 0) {
-          console.log("chicken besiegt");
+          enemy.energy = 0;
         } else {
-          if (this.character.isHurt()) {
+          if (!this.character.isHurt()) {
             this.character.hit();
-            this.healthBar.setPercentage(this.character.energy > 0);
+            this.healthBar.setPercentage(this.character.energy);
           }
         }
       }

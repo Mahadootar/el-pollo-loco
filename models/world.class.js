@@ -75,9 +75,14 @@ class World {
 
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy)) {
-        if (this.character.isAboveGround() && this.character.speedY < 0) {
+      if (this.character.isColliding(enemy) && !enemy.isDead()) {
+        if (
+          this.character.isAboveGround() &&
+          this.character.speedY < 0 &&
+          enemy instanceof Chicken
+        ) {
           enemy.energy = 0;
+          this.removeDeadEnemy(enemy);
         } else {
           if (!this.character.isHurt()) {
             this.character.hit();
@@ -86,6 +91,13 @@ class World {
         }
       }
     });
+  }
+
+  removeDeadEnemy(enemy) {
+    setTimeout(() => {
+      let index = this.level.enemies.indexOf(enemy);
+      this.level.enemies.splice(index, 1);
+    }, 1000);
   }
 
   checkCoinCollision() {

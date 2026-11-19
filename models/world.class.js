@@ -62,6 +62,7 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollisions();
+      this.checkBottleHits();
     }, 50);
     setInterval(() => {
       this.checkThrowableObject();
@@ -70,7 +71,10 @@ class World {
 
   checkThrowableObject() {
     if (this.keyboard.D && this.collectedBottles > 0) {
-      let bottle = new ThrowableObject(this.character.x, this.character.y);
+      let bottle = new ThrowableObject(
+        this.character.x + 100,
+        this.character.y + 100,
+      );
       this.throwableObjects.push(bottle);
       this.collectedBottles--;
       this.bottleBar.setPercentage(
@@ -108,6 +112,27 @@ class World {
       let index = this.level.enemies.indexOf(enemy);
       this.level.enemies.splice(index, 1);
     }, 1000);
+  }
+
+  checkBottleHits() {
+    this.throwableObjects.forEach((bottle) => {
+      this.level.enemies.forEach((enemy) => {
+        if (
+          bottle.isColliding(enemy) &&
+          enemy instanceof Chicken &&
+          !enemy.isDead()
+        ) {
+          this.handleBottleHit(bottle, enemy);
+        }
+      });
+    });
+  }
+
+  handleBottleHit(bottle, enemy) {
+    enemy.energy = 0;
+    this.removeDeadEnemy(enemy);
+    let index = this.throwableObjects.indexOf(bottle);
+    this.throwableObjects.splice(index, 1);
   }
 
   checkCoinCollision() {

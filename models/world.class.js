@@ -34,23 +34,29 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgrounds);
+    this.drawGameObjects();
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMapp(this.healthBar);
-    this.addToMapp(this.coinBar);
-    this.addToMapp(this.bottleBar);
-    this.ctx.translate(this.camera_x, 0);
+    this.drawStatusBars();
+
+    let self = this;
+    requestAnimationFrame(function () {
+      self.draw();
+    });
+  }
+
+  drawGameObjects() {
     this.addToMapp(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottles);
     this.addObjectsToMap(this.throwableObjects);
-    this.ctx.translate(-this.camera_x, 0);
+  }
 
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
+  drawStatusBars() {
+    this.addToMapp(this.healthBar);
+    this.addToMapp(this.coinBar);
+    this.addToMapp(this.bottleBar);
   }
 
   run() {
@@ -76,21 +82,25 @@ class World {
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy) && !enemy.isDead()) {
-        if (
-          this.character.isAboveGround() &&
-          this.character.speedY < 0 &&
-          enemy instanceof Chicken
-        ) {
-          enemy.energy = 0;
-          this.removeDeadEnemy(enemy);
-        } else {
-          if (!this.character.isHurt()) {
-            this.character.hit();
-            this.healthBar.setPercentage(this.character.energy);
-          }
-        }
+        this.handleEnemyCollision(enemy);
       }
     });
+  }
+
+  handleEnemyCollision(enemy) {
+    if (
+      this.character.isAboveGround() &&
+      this.character.speedY < 0 &&
+      enemy instanceof Chicken
+    ) {
+      enemy.energy = 0;
+      this.removeDeadEnemy(enemy);
+    } else {
+      if (!this.character.isHurt()) {
+        this.character.hit();
+        this.healthBar.setPercentage(this.character.energy);
+      }
+    }
   }
 
   removeDeadEnemy(enemy) {

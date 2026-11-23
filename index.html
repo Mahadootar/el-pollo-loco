@@ -26,9 +26,13 @@
     <script src="js/games.js"></script>
   </head>
   <body onload="init()">
-    <div>
+    <div class="game-container">
       <h1>El Pollo Loco</h1>
       <canvas id="canvas" width="720" height="480"> </canvas>
+      <div id="endScreen" class="end-screen d-none">
+        <img src="" id="endScreenImg" alt="Spielende" />
+        <button onclick="location.reload()">Nochmal spielen</button>
+      </div>
     </div>
   </body>
 </html>

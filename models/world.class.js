@@ -101,11 +101,16 @@ class World {
     ) {
       enemy.energy = 0;
       this.removeDeadEnemy(enemy, 1000);
-    } else {
-      if (!this.character.isHurt()) {
-        this.character.hit(5);
-        this.healthBar.setPercentage(this.character.energy);
-      }
+    } else if (!this.character.isHurt()) {
+      this.characterGetHit();
+    }
+  }
+
+  characterGetHit() {
+    this.character.hit(5);
+    this.healthBar.setPercentage(this.character.energy);
+    if (this.character.isDead()) {
+      this.gameLost();
     }
   }
 
@@ -135,6 +140,7 @@ class World {
       this.endbossBar.setPercentage(enemy.energy);
       if (enemy.isDead()) {
         this.removeDeadEnemy(enemy, 1000);
+        this.gameWon();
       }
     }
     let index = this.throwableObjects.indexOf(bottle);
@@ -197,5 +203,27 @@ class World {
   flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
+  }
+
+  gameLost() {
+    this.endGame("../img/You won, you lost/Game Over.png");
+  }
+
+  gameWon() {
+    this.endGame("../img/You won, you lost/You won A.png");
+  }
+
+  endGame(imagePath) {
+    setTimeout(() => {
+      this.stopGame();
+      document.getElementById("endScreenImg").src = imagePath;
+      document.getElementById("endScreen").classList.remove("d-none");
+    }, 1500);
+  }
+
+  stopGame() {
+    for (let i = 1; i < 9999; i++) {
+      clearInterval(i);
+    }
   }
 }

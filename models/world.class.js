@@ -100,7 +100,7 @@ class World {
       enemy instanceof Chicken
     ) {
       enemy.energy = 0;
-      this.removeDeadEnemy(enemy);
+      this.removeDeadEnemy(enemy, 1000);
     } else {
       if (!this.character.isHurt()) {
         this.character.hit(5);
@@ -109,11 +109,11 @@ class World {
     }
   }
 
-  removeDeadEnemy(enemy) {
+  removeDeadEnemy(enemy, delay) {
     setTimeout(() => {
       let index = this.level.enemies.indexOf(enemy);
       this.level.enemies.splice(index, 1);
-    }, 1000);
+    }, delay);
   }
 
   checkBottleHits() {
@@ -129,10 +129,13 @@ class World {
   handleBottleHit(bottle, enemy) {
     if (enemy instanceof Chicken) {
       enemy.energy = 0;
-      this.removeDeadEnemy(enemy);
+      this.removeDeadEnemy(enemy, 1000);
     } else {
       enemy.hit(20);
       this.endbossBar.setPercentage(enemy.energy);
+      if (enemy.isDead()) {
+        this.removeDeadEnemy(enemy, 1000);
+      }
     }
     let index = this.throwableObjects.indexOf(bottle);
     this.throwableObjects.splice(index, 1);

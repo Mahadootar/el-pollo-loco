@@ -8,6 +8,7 @@ class World {
   healthBar = new StatusHealthBar();
   coinBar = new StatusCoinbar();
   bottleBar = new StatusBottlesBar();
+  endbossBar = new StatusEndbossBar();
   throwableObjects = [];
   collectedCoins = 0;
   totalCoins = this.level.coins.length;
@@ -57,6 +58,7 @@ class World {
     this.addToMapp(this.healthBar);
     this.addToMapp(this.coinBar);
     this.addToMapp(this.bottleBar);
+    this.addToMapp(this.endbossBar);
   }
 
   run() {
@@ -101,7 +103,7 @@ class World {
       this.removeDeadEnemy(enemy);
     } else {
       if (!this.character.isHurt()) {
-        this.character.hit();
+        this.character.hit(5);
         this.healthBar.setPercentage(this.character.energy);
       }
     }
@@ -117,11 +119,7 @@ class World {
   checkBottleHits() {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
-        if (
-          bottle.isColliding(enemy) &&
-          enemy instanceof Chicken &&
-          !enemy.isDead()
-        ) {
+        if (bottle.isColliding(enemy) && !enemy.isDead()) {
           this.handleBottleHit(bottle, enemy);
         }
       });
@@ -129,8 +127,13 @@ class World {
   }
 
   handleBottleHit(bottle, enemy) {
-    enemy.energy = 0;
-    this.removeDeadEnemy(enemy);
+    if (enemy instanceof Chicken) {
+      enemy.energy = 0;
+      this.removeDeadEnemy(enemy);
+    } else {
+      enemy.hit(20);
+      this.endbossBar.setPercentage(enemy.energy);
+    }
     let index = this.throwableObjects.indexOf(bottle);
     this.throwableObjects.splice(index, 1);
   }

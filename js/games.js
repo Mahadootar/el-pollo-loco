@@ -13,6 +13,15 @@ function startGame() {
   init();
 }
 
+function toggleFullscreen() {
+  let container = document.getElementById("gameContainer");
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    container.requestFullscreen();
+  }
+}
+
 const KEYS = {
   39: "RIGHT",
   37: "LEFT",

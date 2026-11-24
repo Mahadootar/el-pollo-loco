@@ -26,8 +26,8 @@
     <script src="js/games.js"></script>
   </head>
   <body>
-    <div class="game-container">
-      <h1>El Pollo Loco</h1>
+    <h1>El Pollo Loco</h1>
+    <div class="game-container" id="gameContainer">
       <canvas id="canvas" width="720" height="480"> </canvas>
       <div id="startScreen" class="start-screen">
         <img
@@ -53,6 +53,9 @@
       <div class="control">
         <kbd>D</kbd>
         <span>Flasche werfen</span>
+        <button class="fullscreen-btn" onclick="toggleFullscreen()">
+          Vollbild
+        </button>
       </div>
     </div>
   </body>

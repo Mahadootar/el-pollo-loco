@@ -1,25 +1,58 @@
-body {
-    background-image: url(img/5_background/bg2.png);
-    height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+@font-face {
+  font-family: "zabars";
+  src: url("fonts/zabars.ttf") format("truetype");
 }
 
-canvas{
-    display: block;
-    background-color: black;
-    display: block;
-    width: 100%;
-    height: 100%;
+body {
+  background-image: url(img/5_background/bg2.png);
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: "zabars", sans-serif;
 }
+
+h1 {
+  font-size: 44px;
+  letter-spacing: 4px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+button {
+  font-family: inherit;
+}
+
+/* ---------- Spielbereich ---------- */
 
 .game-container {
   position: relative;
   width: 720px;
   height: 480px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+/* ---------- Start- und End-Screen ---------- */
+
+.start-screen,
+.end-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.start-screen img {
+  width: 100%;
+  height: 100%;
 }
 
 .end-screen {
@@ -35,10 +68,9 @@ canvas{
   max-height: 70%;
 }
 
-.d-none {
-  display: none;
-}
+/* ---------- Buttons auf Start- und End-Screen ---------- */
 
+.start-screen button,
 .end-screen button {
   margin-top: 24px;
   padding: 12px 32px;
@@ -52,6 +84,7 @@ canvas{
   box-shadow: 0 4px 0 #a36f0b;
 }
 
+.start-screen button:hover,
 .end-screen button:hover {
   background-color: #f5b52e;
 }
@@ -61,45 +94,32 @@ canvas{
   box-shadow: none;
 }
 
-.start-screen, .end-screen {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.start-screen img {
-  width: 100%;
-  height: 100%;
-}
-
-.start-screen button:active {
-   transform: translateX(-50%) translateY(4px);
-   box-shadow: none;
-}
-
-
 .start-screen button {
-  margin-top: 24px;
-  padding: 12px 32px;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  background-color: #e8a317;
-  border: none;
-  border-radius: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 #a36f0b;
   position: absolute;
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.start-screen button:hover,.end-screen button:hover {
-  background-color: #f5b52e;
+.start-screen button:active {
+  transform: translateX(-50%) translateY(4px);
+  box-shadow: none;
 }
+
+/* ---------- Vollbild ---------- */
+
+.game-container:fullscreen {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.game-container:fullscreen canvas,
+.game-container:fullscreen .start-screen img {
+  object-fit: contain;
+}
+
+/* ---------- Tasten-Erklärung ---------- */
 
 .controls {
   display: flex;
@@ -132,26 +152,87 @@ kbd {
   box-shadow: 0 3px 0 #999;
 }
 
-.game-container {
-  position: relative;
-  width: 720px;
-  height: 480px;
-}
-
-.game-container:fullscreen {
-  width: 100%;
-  height: 100%;
-  background-color: black;
-}
-
-.game-container:fullscreen .start-screen img {
-  object-fit: contain;
-}
-
 .fullscreen-btn {
   padding: 6px 16px;
   font-size: 16px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
+}
+
+/* ---------- Hilfsklasse: muss nach allen anderen display-Regeln stehen ---------- */
+
+.d-none {
+  display: none;
+}
+
+/* ---------- Handy hochkant (schmaler Bildschirm) ---------- */
+
+@media only screen and (max-width: 720px) {
+  .game-container {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  kbd {
+    min-width: 22px;
+    padding: 2px 6px;
+    font-size: 14px;
+  }
+
+  .fullscreen-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+/* ---------- Handy quer (niedriger Bildschirm) ---------- */
+
+@media only screen and (max-height: 480px) {
+  body {
+    margin: 0;
+  }
+
+  h1 {
+    display: none;
+  }
+
+  .game-container {
+    height: calc(100vh - 56px);
+    width: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .controls {
+    margin-top: 4px;
+    padding: 4px 12px;
+    gap: 16px;
+    font-size: 13px;
+  }
+
+  kbd {
+    min-width: 20px;
+    padding: 1px 5px;
+    font-size: 13px;
+  }
+
+  .fullscreen-btn {
+    font-size: 13px;
+    padding: 3px 10px;
+  }
 }

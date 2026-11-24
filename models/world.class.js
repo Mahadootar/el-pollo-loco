@@ -24,7 +24,6 @@ class World {
     this.run();
     this.checkCoinCollision();
     this.checkBottleCollision();
-    console.log(this.totalCoins);
   }
 
   setWorld() {
@@ -65,6 +64,7 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkBottleHits();
+      this.removeFallenBottles();
     }, 50);
     setInterval(() => {
       this.checkThrowableObject();
@@ -73,10 +73,9 @@ class World {
 
   checkThrowableObject() {
     if (this.keyboard.D && this.collectedBottles > 0) {
-      let bottle = new ThrowableObject(
-        this.character.x + 100,
-        this.character.y + 100,
-      );
+      let toLeft = this.character.otherDirection;
+      let startX = toLeft ? this.character.x : this.character.x + 100;
+      let bottle = new ThrowableObject(startX, this.character.y + 100, toLeft);
       this.throwableObjects.push(bottle);
       this.collectedBottles--;
       this.bottleBar.setPercentage(
@@ -145,6 +144,12 @@ class World {
     }
     let index = this.throwableObjects.indexOf(bottle);
     this.throwableObjects.splice(index, 1);
+  }
+
+  removeFallenBottles() {
+    this.throwableObjects = this.throwableObjects.filter(
+      (bottle) => bottle.y < 480,
+    );
   }
 
   checkCoinCollision() {

@@ -101,3 +101,33 @@ canvas{
 .start-screen button:hover {
   background-color: #f5b52e;
 }
+
+.controls {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+  padding: 12px 24px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+  color: white;
+  font-size: 18px;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 28px;
+  padding: 4px 8px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 18px;
+  color: black;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  box-shadow: 0 3px 0 #999;
+}

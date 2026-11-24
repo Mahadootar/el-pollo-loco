@@ -7,6 +7,12 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+function startGame() {
+  document.getElementById("startScreen").classList.add("d-none");
+  initLevel();
+  init();
+}
+
 const KEYS = {
   39: "RIGHT",
   37: "LEFT",

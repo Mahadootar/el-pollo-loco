@@ -29,10 +29,10 @@ function createBackgrounds() {
   for (let i = -1; i <= 3; i++) {
     let x = 719 * i;
     let n = i % 2 == 0 ? 1 : 2;
-    backgrounds.push(new Background("../img/5_background/layers/air.png", x));
-    backgrounds.push(new Background(`../img/5_background/layers/3_third_layer/${n}.png`, x));
-    backgrounds.push(new Background(`../img/5_background/layers/2_second_layer/${n}.png`, x));
-    backgrounds.push(new Background(`../img/5_background/layers/1_first_layer/${n}.png`, x));
+    backgrounds.push(new Background("img/5_background/layers/air.png", x));
+    backgrounds.push(new Background(`img/5_background/layers/3_third_layer/${n}.png`, x));
+    backgrounds.push(new Background(`img/5_background/layers/2_second_layer/${n}.png`, x));
+    backgrounds.push(new Background(`img/5_background/layers/1_first_layer/${n}.png`, x));
   }
   return backgrounds;
 }

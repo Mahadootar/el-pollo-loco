@@ -9,7 +9,7 @@ class ThrowableObject extends MoveableObject {
    * @param {boolean} toLeft - True if the bottle flies to the left.
    */
   constructor(x, y, toLeft) {
-    super().loadImage("../img/6_salsa_bottle/salsa_bottle.png");
+    super().loadImage("img/6_salsa_bottle/salsa_bottle.png");
     this.x = x;
     this.y = y;
     this.toLeft = toLeft;

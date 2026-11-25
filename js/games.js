@@ -30,26 +30,31 @@ function startGame() {
 
 /**
  * Turns the fullscreen mode of the game on or off.
- * Uses the normal and the older "webkit" version, so it also works in Safari on the iPad.
+ * Devices without real fullscreen (e.g. iPhone) get a CSS fullscreen instead.
  */
 function toggleFullscreen() {
   let container = document.getElementById("gameContainer");
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+  } else if (container.classList.contains("pseudo-fullscreen")) {
+    container.classList.remove("pseudo-fullscreen");
+  } else if (container.requestFullscreen || container.webkitRequestFullscreen) {
+    requestRealFullscreen(container);
   } else {
-    let request = container.requestFullscreen || container.webkitRequestFullscreen;
-    let result = request.call(container);
-    if (result) result.catch(() => {});
+    container.classList.add("pseudo-fullscreen");
   }
 }
 
 /**
- * Hides the fullscreen button on devices that cannot show a web page in fullscreen (e.g. iPhone).
+ * Asks the browser for real fullscreen. If the browser says no, the CSS fullscreen is used.
+ * Uses the normal and the older "webkit" version, so it also works in Safari on the iPad.
+ * @param {HTMLElement} container - The element that should become fullscreen.
  */
-function hideFullscreenButtonIfNotSupported() {
-  let container = document.getElementById("gameContainer");
-  if (!container.requestFullscreen && !container.webkitRequestFullscreen) {
-    document.getElementById("fullscreenBtn").classList.add("d-none");
+function requestRealFullscreen(container) {
+  let request = container.requestFullscreen || container.webkitRequestFullscreen;
+  let result = request.call(container);
+  if (result) {
+    result.catch(() => container.classList.add("pseudo-fullscreen"));
   }
 }
 
@@ -112,7 +117,4 @@ function bindTouchButtons() {
   });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  bindTouchButtons();
-  hideFullscreenButtonIfNotSupported();
-});
+window.addEventListener("DOMContentLoaded", bindTouchButtons);

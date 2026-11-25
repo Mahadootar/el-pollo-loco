@@ -133,6 +133,58 @@ canvas {
   object-fit: contain;
 }
 
+/* CSS fullscreen for devices without real fullscreen (e.g. iPhone) */
+.game-container.pseudo-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  aspect-ratio: auto;
+  z-index: 1000;
+  background-color: black;
+}
+
+.game-container.pseudo-fullscreen canvas,
+.game-container.pseudo-fullscreen .start-screen img {
+  object-fit: contain;
+}
+
+body:has(.pseudo-fullscreen) {
+  overflow: hidden;
+}
+
+/* Button to leave fullscreen, only visible in fullscreen */
+.exit-fullscreen-btn {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.game-container.pseudo-fullscreen .exit-fullscreen-btn {
+  display: block;
+}
+
+.game-container:fullscreen .exit-fullscreen-btn {
+  display: block;
+}
+
+.game-container:-webkit-full-screen .exit-fullscreen-btn {
+  display: block;
+}
+
 /* ---------- Tasten-Erklärung ---------- */
 
 .controls {

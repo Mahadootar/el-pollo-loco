@@ -1,6 +1,11 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let backgroundMusic = new Audio(
+  "audio/foggysunrise-desert-music-loop-371877.mp3",
+);
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.3;
 
 function init() {
   canvas = document.getElementById("canvas");
@@ -11,6 +16,7 @@ function startGame() {
   document.getElementById("startScreen").classList.add("d-none");
   initLevel();
   init();
+  backgroundMusic.play();
 }
 
 function toggleFullscreen() {

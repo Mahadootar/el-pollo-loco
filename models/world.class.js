@@ -104,12 +104,13 @@ class World {
       enemy.energy = 0;
       this.removeDeadEnemy(enemy, 1000);
     } else if (!this.character.isHurt()) {
-      this.characterGetHit();
+      this.characterGetHit(enemy);
     }
   }
 
-  characterGetHit() {
-    this.character.hit(5);
+  characterGetHit(enemy) {
+    let damage = enemy instanceof Endboss ? 20 : 5;
+    this.character.hit(damage);
     this.healthBar.setPercentage(this.character.energy);
     if (this.character.isDead()) {
       this.gameLost();
@@ -214,16 +215,17 @@ class World {
   }
 
   gameLost() {
-    this.endGame("../img/You won, you lost/Game Over.png");
+    this.endGame("img/You won, you lost/You lost.png");
   }
 
   gameWon() {
-    this.endGame("../img/You won, you lost/You won A.png");
+    this.endGame("img/You won, you lost/You won A.png");
   }
 
   endGame(imagePath) {
     setTimeout(() => {
       this.stopGame();
+      backgroundMusic.pause();
       document.getElementById("endScreenImg").src = imagePath;
       document.getElementById("endScreen").classList.remove("d-none");
     }, 1500);

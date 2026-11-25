@@ -155,34 +155,36 @@ body:has(.pseudo-fullscreen) {
   overflow: hidden;
 }
 
-/* Button to leave fullscreen, only visible in fullscreen */
-.exit-fullscreen-btn {
-  display: none;
+/* ---------- Sound- und Vollbild-Button im Spiel (oben in der Mitte) ---------- */
+
+.game-buttons {
   position: absolute;
   top: 8px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+.game-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 40px;
   height: 40px;
+  padding: 0;
   border: none;
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   font-size: 20px;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
-.game-container.pseudo-fullscreen .exit-fullscreen-btn {
-  display: block;
-}
-
-.game-container:fullscreen .exit-fullscreen-btn {
-  display: block;
-}
-
-.game-container:-webkit-full-screen .exit-fullscreen-btn {
-  display: block;
+.game-btn:active {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* ---------- Tasten-Erklärung ---------- */
@@ -216,14 +218,6 @@ kbd {
   background-color: #f0f0f0;
   border-radius: 6px;
   box-shadow: 0 3px 0 #999;
-}
-
-.fullscreen-btn {
-  padding: 6px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
 }
 
 /* ---------- Touch-Buttons fürs Handy ---------- */
@@ -274,7 +268,7 @@ kbd {
     display: flex;
   }
 
-  .control {
+  .controls {
     display: none;
   }
 }
@@ -314,9 +308,10 @@ kbd {
     font-size: 14px;
   }
 
-  .fullscreen-btn {
-    font-size: 14px;
-    padding: 6px 12px;
+  .game-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
   }
 }
 
@@ -344,10 +339,5 @@ kbd {
     min-width: 20px;
     padding: 1px 5px;
     font-size: 13px;
-  }
-
-  .fullscreen-btn {
-    font-size: 13px;
-    padding: 3px 10px;
   }
 }

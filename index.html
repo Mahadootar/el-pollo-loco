@@ -30,7 +30,6 @@
     <h1>El Pollo Loco</h1>
     <div class="game-container" id="gameContainer">
       <canvas id="canvas" width="720" height="480"> </canvas>
-      <button class="exit-fullscreen-btn" onclick="toggleFullscreen()">✕</button>
       <div class="mobile-controls">
         <div class="mobile-group">
           <button id="btnLeft" class="mobile-btn">◀</button>
@@ -54,6 +53,14 @@
         <img src="" id="endScreenImg" alt="Spielende" />
         <button onclick="location.reload()">Nochmal spielen</button>
       </div>
+      <div class="game-buttons">
+        <button id="soundBtn" class="game-btn" onclick="toggleSound()" aria-label="Ton an/aus">🔊</button>
+        <button id="fullscreenBtn" class="game-btn" onclick="toggleFullscreen()" aria-label="Vollbild">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+            <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+          </svg>
+        </button>
+      </div>
     </div>
     <div class="controls">
       <div class="control">
@@ -68,12 +75,6 @@
         <kbd>D</kbd>
         <span>Flasche werfen</span>
       </div>
-      <button id="soundBtn" class="fullscreen-btn" onclick="toggleSound()">
-        🔊
-      </button>
-      <button id="fullscreenBtn" class="fullscreen-btn" onclick="toggleFullscreen()">
-        Vollbild
-      </button>
     </div>
   </body>
 </html>

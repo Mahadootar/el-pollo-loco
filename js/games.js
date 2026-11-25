@@ -30,13 +30,26 @@ function startGame() {
 
 /**
  * Turns the fullscreen mode of the game on or off.
+ * Uses the normal and the older "webkit" version, so it also works in Safari on the iPad.
  */
 function toggleFullscreen() {
   let container = document.getElementById("gameContainer");
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    (document.exitFullscreen || document.webkitExitFullscreen).call(document);
   } else {
-    container.requestFullscreen();
+    let request = container.requestFullscreen || container.webkitRequestFullscreen;
+    let result = request.call(container);
+    if (result) result.catch(() => {});
+  }
+}
+
+/**
+ * Hides the fullscreen button on devices that cannot show a web page in fullscreen (e.g. iPhone).
+ */
+function hideFullscreenButtonIfNotSupported() {
+  let container = document.getElementById("gameContainer");
+  if (!container.requestFullscreen && !container.webkitRequestFullscreen) {
+    document.getElementById("fullscreenBtn").classList.add("d-none");
   }
 }
 
@@ -99,4 +112,7 @@ function bindTouchButtons() {
   });
 }
 
-window.addEventListener("DOMContentLoaded", bindTouchButtons);
+window.addEventListener("DOMContentLoaded", () => {
+  bindTouchButtons();
+  hideFullscreenButtonIfNotSupported();
+});

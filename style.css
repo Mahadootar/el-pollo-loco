@@ -121,6 +121,18 @@ canvas {
   object-fit: contain;
 }
 
+/* Same for older Safari versions (own rules, because an unknown selector would break the rule above) */
+.game-container:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.game-container:-webkit-full-screen canvas,
+.game-container:-webkit-full-screen .start-screen img {
+  object-fit: contain;
+}
+
 /* ---------- Tasten-Erklärung ---------- */
 
 .controls {

@@ -1,64 +1,38 @@
 let level1;
 
+const COIN_POSITIONS = [
+  [400, 280], [500, 260], [600, 270], [850, 150], [950, 70],
+  [1050, 150], [1300, 280], [1400, 280], [1600, 150], [1900, 70],
+];
+
+const BOTTLE_POSITIONS = [250, 750, 950, 1150, 1230, 1500, 1580, 1700, 1780, 1860];
+
+/**
+ * Creates level 1 with all enemies, clouds, background layers, coins and bottles.
+ */
 function initLevel() {
   level1 = new Level(
     [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
-    (clouds = [new Cloud()]),
-    (backgrounds = [
-      new Background("../img/5_background/layers/air.png", -719),
-      new Background("../img/5_background/layers/3_third_layer/2.png", -719),
-      new Background("../img/5_background/layers/2_second_layer/2.png", -719),
-      new Background("../img/5_background/layers/1_first_layer/2.png", -719),
-
-      new Background("../img/5_background/layers/air.png", 0),
-      new Background("../img/5_background/layers/3_third_layer/1.png", 0),
-      new Background("../img/5_background/layers/2_second_layer/1.png", 0),
-      new Background("../img/5_background/layers/1_first_layer/1.png", 0),
-
-      new Background("../img/5_background/layers/air.png", 719),
-      new Background("../img/5_background/layers/3_third_layer/2.png", 719),
-      new Background("../img/5_background/layers/2_second_layer/2.png", 719),
-      new Background("../img/5_background/layers/1_first_layer/2.png", 719),
-
-      new Background("../img/5_background/layers/air.png", 719 * 2),
-      new Background("../img/5_background/layers/3_third_layer/1.png", 719 * 2),
-      new Background(
-        "../img/5_background/layers/2_second_layer/1.png",
-        719 * 2,
-      ),
-      new Background("../img/5_background/layers/1_first_layer/1.png", 719 * 2),
-
-      new Background("../img/5_background/layers/air.png", 719 * 3),
-      new Background("../img/5_background/layers/3_third_layer/2.png", 719 * 3),
-      new Background(
-        "../img/5_background/layers/2_second_layer/2.png",
-        719 * 3,
-      ),
-      new Background("../img/5_background/layers/1_first_layer/2.png", 719 * 3),
-    ]),
-    (coins = [
-      new Coins(400, 280),
-      new Coins(500, 260),
-      new Coins(600, 270),
-      new Coins(850, 150),
-      new Coins(950, 70),
-      new Coins(1050, 150),
-      new Coins(1300, 280),
-      new Coins(1400, 280),
-      new Coins(1600, 150),
-      new Coins(1900, 70),
-    ]),
-    (bottles = [
-      new Bottles(250, 370),
-      new Bottles(750, 370),
-      new Bottles(950, 370),
-      new Bottles(1150, 370),
-      new Bottles(1230, 370),
-      new Bottles(1500, 370),
-      new Bottles(1580, 370),
-      new Bottles(1700, 370),
-      new Bottles(1780, 370),
-      new Bottles(1860, 370),
-    ]),
+    [new Cloud()],
+    createBackgrounds(),
+    COIN_POSITIONS.map(([x, y]) => new Coins(x, y)),
+    BOTTLE_POSITIONS.map((x) => new Bottles(x, 370)),
   );
+}
+
+/**
+ * Creates the background from -719 to 719 * 3. Image 1 and 2 of each layer take turns.
+ * @returns {Background[]} All background layers.
+ */
+function createBackgrounds() {
+  let backgrounds = [];
+  for (let i = -1; i <= 3; i++) {
+    let x = 719 * i;
+    let n = i % 2 == 0 ? 1 : 2;
+    backgrounds.push(new Background("../img/5_background/layers/air.png", x));
+    backgrounds.push(new Background(`../img/5_background/layers/3_third_layer/${n}.png`, x));
+    backgrounds.push(new Background(`../img/5_background/layers/2_second_layer/${n}.png`, x));
+    backgrounds.push(new Background(`../img/5_background/layers/1_first_layer/${n}.png`, x));
+  }
+  return backgrounds;
 }

@@ -1,3 +1,6 @@
+/**
+ * The game world. It draws everything, checks all collisions and ends the game.
+ */
 class World {
   character = new Character();
   level = level1;
@@ -6,8 +9,8 @@ class World {
   keyboard;
   camera_x = 0;
   healthBar = new StatusHealthBar();
-  coinBar = new StatusCoinbar();
-  bottleBar = new StatusBottlesBar();
+  coinBar = new StatusCoinBar();
+  bottleBar = new StatusBottleBar();
   endbossBar = new StatusEndbossBar();
   throwableObjects = [];
   collectedCoins = 0;
@@ -15,6 +18,11 @@ class World {
   totalBottles = this.level.bottles.length;
   collectedBottles = 0;
 
+  /**
+   * Creates the world and starts drawing and all checks.
+   * @param {HTMLCanvasElement} canvas - The canvas to draw on.
+   * @param {Keyboard} keyboard - The pressed keys.
+   */
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
@@ -26,6 +34,9 @@ class World {
     this.checkBottleCollision();
   }
 
+  /**
+   * Gives Pepe and all enemies access to the world.
+   */
   setWorld() {
     this.character.world = this;
     this.level.enemies.forEach((enemy) => {
@@ -33,6 +44,9 @@ class World {
     });
   }
 
+  /**
+   * Draws the whole game again and again (about 60 times per second).
+   */
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
@@ -47,8 +61,11 @@ class World {
     });
   }
 
+  /**
+   * Draws everything that moves with the camera.
+   */
   drawGameObjects() {
-    this.addToMapp(this.character);
+    this.addToMap(this.character);
     this.addObjectsToMap(this.level.clouds);
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
@@ -56,13 +73,19 @@ class World {
     this.addObjectsToMap(this.throwableObjects);
   }
 
+  /**
+   * Draws the status bars. They stay fixed on the screen.
+   */
   drawStatusBars() {
-    this.addToMapp(this.healthBar);
-    this.addToMapp(this.coinBar);
-    this.addToMapp(this.bottleBar);
-    this.addToMapp(this.endbossBar);
+    this.addToMap(this.healthBar);
+    this.addToMap(this.coinBar);
+    this.addToMap(this.bottleBar);
+    this.addToMap(this.endbossBar);
   }
 
+  /**
+   * Starts the checks for enemies and bottles.
+   */
   run() {
     setInterval(() => {
       this.checkCollisions();
@@ -74,6 +97,9 @@ class World {
     }, 200);
   }
 
+  /**
+   * Throws a bottle in the direction Pepe is looking, if D is pressed and he has a bottle.
+   */
   checkThrowableObject() {
     if (this.keyboard.D && this.collectedBottles > 0) {
       let toLeft = this.character.otherDirection;
@@ -81,12 +107,13 @@ class World {
       let bottle = new ThrowableObject(startX, this.character.y + 100, toLeft);
       this.throwableObjects.push(bottle);
       this.collectedBottles--;
-      this.bottleBar.setPercentage(
-        (this.collectedBottles / this.totalBottles) * 100,
-      );
+      this.updateBottleBar();
     }
   }
 
+  /**
+   * Checks if Pepe touches a living enemy.
+   */
   checkCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy) && !enemy.isDead()) {
@@ -95,6 +122,10 @@ class World {
     });
   }
 
+  /**
+   * Pepe kills a chicken when he lands on it. Otherwise he gets hurt.
+   * @param {MoveableObject} enemy - The enemy Pepe touches.
+   */
   handleEnemyCollision(enemy) {
     if (
       this.character.isAboveGround() &&
@@ -108,6 +139,10 @@ class World {
     }
   }
 
+  /**
+   * Pepe loses energy. The endboss hurts more than a chicken.
+   * @param {MoveableObject} enemy - The enemy that hits Pepe.
+   */
   characterGetHit(enemy) {
     let damage = enemy instanceof Endboss ? 20 : 5;
     this.character.hit(damage);
@@ -117,13 +152,23 @@ class World {
     }
   }
 
+  /**
+   * Removes a dead enemy from the level after a short time.
+   * @param {MoveableObject} enemy - The dead enemy.
+   * @param {number} delay - Time in milliseconds until it disappears.
+   */
   removeDeadEnemy(enemy, delay) {
     setTimeout(() => {
       let index = this.level.enemies.indexOf(enemy);
-      this.level.enemies.splice(index, 1);
+      if (index != -1) {
+        this.level.enemies.splice(index, 1);
+      }
     }, delay);
   }
 
+  /**
+   * Checks if a flying bottle hits a living enemy.
+   */
   checkBottleHits() {
     this.throwableObjects.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
@@ -134,33 +179,51 @@ class World {
     });
   }
 
+  /**
+   * A bottle kills a chicken or hurts the endboss. Then the bottle disappears.
+   * @param {ThrowableObject} bottle - The bottle that hits.
+   * @param {MoveableObject} enemy - The enemy that is hit.
+   */
   handleBottleHit(bottle, enemy) {
     if (enemy instanceof Chicken) {
       enemy.energy = 0;
       this.removeDeadEnemy(enemy, 1000);
     } else {
-      enemy.hit(20);
-      this.endbossBar.setPercentage(enemy.energy);
-      if (enemy.isDead()) {
-        this.removeDeadEnemy(enemy, 1000);
-        this.gameWon();
-      }
+      this.endbossGetHit(enemy);
     }
     let index = this.throwableObjects.indexOf(bottle);
     this.throwableObjects.splice(index, 1);
   }
 
+  /**
+   * The endboss loses energy. When he is dead, the game is won.
+   * @param {Endboss} endboss - The endboss.
+   */
+  endbossGetHit(endboss) {
+    endboss.hit(20);
+    this.endbossBar.setPercentage(endboss.energy);
+    if (endboss.isDead()) {
+      this.removeDeadEnemy(endboss, 3000);
+      this.gameWon();
+    }
+  }
+
+  /**
+   * Removes bottles that fell out of the screen.
+   */
   removeFallenBottles() {
     this.throwableObjects = this.throwableObjects.filter(
       (bottle) => bottle.y < 480,
     );
   }
 
+  /**
+   * Checks if Pepe collects a coin.
+   */
   checkCoinCollision() {
     setInterval(() => {
       this.level.coins.forEach((coin, index) => {
         if (this.character.isColliding(coin)) {
-          console.log("coins berührt", this.collectedCoins);
           this.collectedCoins++;
           this.level.coins.splice(index, 1);
           this.coinBar.setPercentage(
@@ -171,27 +234,45 @@ class World {
     }, 100);
   }
 
+  /**
+   * Checks if Pepe collects a bottle from the ground.
+   */
   checkBottleCollision() {
     setInterval(() => {
       this.level.bottles.forEach((bottle, index) => {
         if (this.character.isColliding(bottle)) {
           this.collectedBottles++;
           this.level.bottles.splice(index, 1);
-          this.bottleBar.setPercentage(
-            (this.collectedBottles / this.totalBottles) * 100,
-          );
+          this.updateBottleBar();
         }
       });
     }, 100);
   }
 
+  /**
+   * Shows the number of bottles Pepe has in the bottle bar.
+   */
+  updateBottleBar() {
+    this.bottleBar.setPercentage(
+      (this.collectedBottles / this.totalBottles) * 100,
+    );
+  }
+
+  /**
+   * Draws several objects.
+   * @param {DrawableObject[]} objects - The objects to draw.
+   */
   addObjectsToMap(objects) {
     objects.forEach((o) => {
-      this.addToMapp(o);
+      this.addToMap(o);
     });
   }
 
-  addToMapp(mo) {
+  /**
+   * Draws one object. Objects that look to the left are mirrored.
+   * @param {DrawableObject} mo - The object to draw.
+   */
+  addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
     }
@@ -202,6 +283,10 @@ class World {
     }
   }
 
+  /**
+   * Mirrors the canvas so the object is drawn looking to the left.
+   * @param {DrawableObject} mo - The object to mirror.
+   */
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -209,19 +294,33 @@ class World {
     mo.x = mo.x * -1;
   }
 
+  /**
+   * Undoes the mirroring after the object was drawn.
+   * @param {DrawableObject} mo - The mirrored object.
+   */
   flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
   }
 
+  /**
+   * Ends the game with the "You lost" screen.
+   */
   gameLost() {
     this.endGame("img/You won, you lost/You lost.png");
   }
 
+  /**
+   * Ends the game with the "You won" screen.
+   */
   gameWon() {
     this.endGame("img/You won, you lost/You won A.png");
   }
 
+  /**
+   * Waits a moment, stops the game and shows the end screen.
+   * @param {string} imagePath - Path to the image of the end screen.
+   */
   endGame(imagePath) {
     setTimeout(() => {
       this.stopGame();
@@ -231,6 +330,9 @@ class World {
     }, 1500);
   }
 
+  /**
+   * Stops all intervals, so nothing moves anymore.
+   */
   stopGame() {
     for (let i = 1; i < 9999; i++) {
       clearInterval(i);

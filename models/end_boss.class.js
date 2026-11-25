@@ -1,8 +1,17 @@
+/**
+ * The endboss. He waits until Pepe comes close, then walks towards him and attacks.
+ */
 class Endboss extends MoveableObject {
   width = 300;
   height = 500;
   y = -58;
   isActive = false;
+  offset = {
+    top: 100,
+    bottom: 20,
+    right: 30,
+    left: 40,
+  };
 
   IMAGES_ALERT = [
     "../img/4_enemie_boss_chicken/2_alert/G5.png",
@@ -21,6 +30,7 @@ class Endboss extends MoveableObject {
     "../img/4_enemie_boss_chicken/1_walk/G3.png",
     "../img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
+
   IMAGES_ATTACK = [
     "../img/4_enemie_boss_chicken/3_attack/G13.png",
     "../img/4_enemie_boss_chicken/3_attack/G14.png",
@@ -44,6 +54,9 @@ class Endboss extends MoveableObject {
     "../img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
+  /**
+   * Loads all images, places the endboss at the end of the level and starts the animation.
+   */
   constructor() {
     super().loadImage(this.IMAGES_ALERT[0]);
     this.loadImages(this.IMAGES_ALERT);
@@ -55,6 +68,9 @@ class Endboss extends MoveableObject {
     this.animate();
   }
 
+  /**
+   * Starts the image animation and the movement.
+   */
   animate() {
     setInterval(() => {
       this.playEndbossAnimation();
@@ -65,6 +81,9 @@ class Endboss extends MoveableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Activates the endboss when Pepe comes close. An active endboss walks to the left.
+   */
   moveEndboss() {
     if (this.world.character.x >= 1500) {
       this.isActive = true;
@@ -74,15 +93,28 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Checks if Pepe is close enough to be attacked.
+   * @returns {boolean} True if Pepe is near the endboss.
+   */
+  isNearCharacter() {
+    return this.x - this.world.character.x < 200;
+  }
+
+  /**
+   * Chooses the right animation: dead, hurt, attack, walking or alert.
+   */
   playEndbossAnimation() {
     if (this.isDead()) {
-      this.playImagesWalkingAnimation(this.IMAGES_DEAD);
+      this.playAnimation(this.IMAGES_DEAD);
     } else if (this.isHurt()) {
-      this.playImagesWalkingAnimation(this.IMAGES_HURT);
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.isActive && this.isNearCharacter()) {
+      this.playAnimation(this.IMAGES_ATTACK);
     } else if (this.isActive) {
-      this.playImagesWalkingAnimation(this.IMAGES_WALKING);
+      this.playAnimation(this.IMAGES_WALKING);
     } else {
-      this.playImagesWalkingAnimation(this.IMAGES_ALERT);
+      this.playAnimation(this.IMAGES_ALERT);
     }
   }
 }

@@ -44,3 +44,25 @@ window.addEventListener("keyup", (e) => {
     keyboard[name] = false;
   }
 });
+
+const TOUCH_BUTTONS = {
+  btnLeft: "LEFT",
+  btnRight: "RIGHT",
+  btnJump: "UP",
+  btnThrow: "D",
+};
+
+function bindTouchButtons() {
+  Object.entries(TOUCH_BUTTONS).forEach(([id, name]) => {
+    let button = document.getElementById(id);
+    button.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      keyboard[name] = true;
+    });
+    ["pointerup", "pointerleave", "pointercancel"].forEach((type) => {
+      button.addEventListener(type, () => (keyboard[name] = false));
+    });
+  });
+}
+
+window.addEventListener("DOMContentLoaded", bindTouchButtons);

@@ -162,6 +162,59 @@ kbd {
   cursor: pointer;
 }
 
+/* ---------- Touch-Buttons fürs Handy ---------- */
+
+.mobile-controls {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  justify-content: space-between;
+  padding: 0 12px;
+  pointer-events: none;
+}
+
+.mobile-group {
+  display: flex;
+  gap: 12px;
+}
+
+.mobile-btn {
+  pointer-events: auto;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.35);
+  color: white;
+  font-size: 24px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.mobile-btn:active {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.mobile-btn img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mobile-controls {
+    display: flex;
+  }
+
+  .control {
+    display: none;
+  }
+}
+
 /* ---------- Hilfsklasse: muss nach allen anderen display-Regeln stehen ---------- */
 
 .d-none {

@@ -88,7 +88,7 @@ class World {
       this.checkCollisions();
       this.checkBottleHits();
       this.removeFallenBottles();
-    }, 50);
+    }, 1000 / 60);
     setStoppableInterval(() => {
       this.checkThrowableObject();
     }, 200);

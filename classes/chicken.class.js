@@ -5,6 +5,12 @@ class Chicken extends MoveableObject {
   y = 355;
   width = 90;
   height = 80;
+  offset = {
+    top: 8,
+    bottom: 8,
+    left: 8,
+    right: 8,
+  };
   IMAGES_WALKING = [
     "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
     "img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",

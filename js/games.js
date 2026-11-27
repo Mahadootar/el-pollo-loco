@@ -126,6 +126,7 @@ const TOUCH_BUTTONS = {
 function bindTouchButtons() {
   Object.entries(TOUCH_BUTTONS).forEach(([id, name]) => {
     let button = document.getElementById(id);
+    button.addEventListener("contextmenu", (e) => e.preventDefault());
     button.addEventListener("pointerdown", (e) => {
       e.preventDefault();
       keyboard[name] = true;

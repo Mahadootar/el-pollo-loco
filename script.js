@@ -62,6 +62,32 @@ function updateSoundButton() {
   document.getElementById("soundBtn").innerText = isMuted ? "🔇" : "🔊";
 }
 
+/**
+ * Opens the dialog with the game instructions.
+ */
+function openHelp() {
+  document.getElementById("helpDialog").showModal();
+}
+
+/**
+ * Closes the dialog with the game instructions.
+ */
+function closeHelp() {
+  document.getElementById("helpDialog").close();
+}
+
+/**
+ * Closes the dialog when the user clicks next to it (on the dark background).
+ */
+function closeHelpOnBackdropClick() {
+  let dialog = document.getElementById("helpDialog");
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) {
+      closeHelp();
+    }
+  });
+}
+
 /** Key code → name of the key in the Keyboard class. */
 const KEYS = {
   39: "RIGHT",
@@ -113,4 +139,5 @@ function bindTouchButtons() {
 window.addEventListener("DOMContentLoaded", () => {
   bindTouchButtons();
   updateSoundButton();
+  closeHelpOnBackdropClick();
 });

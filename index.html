@@ -63,6 +63,9 @@
         <button onclick="location.reload()">Nochmal spielen</button>
       </div>
       <div class="game-buttons">
+        <button class="game-btn" onclick="openHelp()" aria-label="Spielanleitung">
+          ❓
+        </button>
         <button
           id="soundBtn"
           class="game-btn"
@@ -91,20 +94,33 @@
         </button>
       </div>
     </div>
-    <div class="controls">
-      <div class="control">
-        <kbd>←</kbd><kbd>→</kbd>
-        <span>Laufen</span>
+    <dialog id="helpDialog" class="help-dialog">
+      <div class="help-content">
+        <button class="help-close" onclick="closeHelp()" aria-label="Schließen">✕</button>
+        <h2>So wird gespielt</h2>
+
+        <h3>Die Story</h3>
+        <p>
+          Pepe wandert durch die mexikanische Wüste. Ein riesiges Huhn bedroht
+          sein Dorf – nur mit scharfen Salsa-Flaschen kann er es besiegen!
+        </p>
+
+        <h3>Das Ziel</h3>
+        <p>
+          Sammle Coins und Salsa-Flaschen. Besiege das Riesenhuhn am Ende mit
+          5 Flaschen-Treffern. Auf Hühner kannst du springen oder sie mit einer
+          Flasche treffen.
+        </p>
+
+        <h3>Tastatur</h3>
+        <div class="control"><kbd>←</kbd><kbd>→</kbd><span>Laufen</span></div>
+        <div class="control"><kbd>↑</kbd><kbd>Leertaste</kbd><span>Springen</span></div>
+        <div class="control"><kbd>D</kbd><span>Flasche werfen</span></div>
+
+        <h3>Handy</h3>
+        <p>◀ ▶ laufen, ▲ springen, Flasche werfen. Spiele im Querformat.</p>
       </div>
-      <div class="control">
-        <kbd>↑</kbd><kbd>Leertaste</kbd>
-        <span>Springen</span>
-      </div>
-      <div class="control">
-        <kbd>D</kbd>
-        <span>Flasche werfen</span>
-      </div>
-    </div>
+    </dialog>
     <div class="rotate-screen">
       <div class="rotate-icon">📱</div>
       <p>Bitte dreh dein Gerät ins Querformat, um zu spielen.</p>

@@ -165,24 +165,62 @@ canvas {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* ---------- Tasten-Erklärung ---------- */
+/* ---------- Dialog mit der Spielanleitung ---------- */
 
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  margin-top: 16px;
-  padding: 12px 24px;
-  background-color: rgba(0, 0, 0, 0.6);
+.help-dialog {
+  width: min(520px, 90vw);
+  max-height: 85vh;
+  padding: 0;
+  border: none;
   border-radius: 16px;
+  background-color: #fff3dc;
+  color: #3a2a12;
+}
+
+.help-dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.help-content {
+  position: relative;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.help-content h2 {
+  margin-top: 0;
+}
+
+.help-content h3 {
+  margin: 16px 0 6px;
+}
+
+.help-content p {
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.4;
+}
+
+.help-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background-color: #e8a317;
   color: white;
   font-size: 18px;
+  cursor: pointer;
 }
 
 .control {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 8px;
+  font-family: sans-serif;
 }
 
 kbd {
@@ -246,10 +284,6 @@ kbd {
 @media (hover: none) and (pointer: coarse) {
   .mobile-controls {
     display: flex;
-  }
-
-  .controls {
-    display: none;
   }
 
   #fullscreenBtn {
@@ -319,22 +353,6 @@ kbd {
     font-size: 28px;
   }
 
-  .controls {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px 20px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    font-size: 14px;
-  }
-
-  kbd {
-    min-width: 22px;
-    padding: 2px 6px;
-    font-size: 14px;
-  }
-
   .game-btn {
     width: 34px;
     height: 34px;
@@ -350,21 +368,8 @@ kbd {
   }
 
   .game-container {
-    height: calc(100vh - 56px);
+    height: 100vh;
     width: auto;
     aspect-ratio: 3 / 2;
-  }
-
-  .controls {
-    margin-top: 4px;
-    padding: 4px 12px;
-    gap: 16px;
-    font-size: 13px;
-  }
-
-  kbd {
-    min-width: 20px;
-    padding: 1px 5px;
-    font-size: 13px;
   }
 }

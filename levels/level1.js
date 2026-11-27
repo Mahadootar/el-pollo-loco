@@ -12,12 +12,28 @@ const BOTTLE_POSITIONS = [250, 750, 950, 1150, 1230, 1500, 1580, 1700, 1780, 186
  */
 function initLevel() {
   level1 = new Level(
-    [new Chicken(), new Chicken(), new Chicken(), new Endboss()],
+    createEnemies(),
     [new Cloud()],
     createBackgrounds(),
     COIN_POSITIONS.map(([x, y]) => new Coins(x, y)),
     BOTTLE_POSITIONS.map((x) => new Bottles(x, 370)),
   );
+}
+
+/**
+ * Creates all enemies: 3 normal chickens, 3 small chickens and the endboss.
+ * @returns {MoveableObject[]} All enemies of the level.
+ */
+function createEnemies() {
+  return [
+    new Chicken(),
+    new Chicken(),
+    new Chicken(),
+    new SmallChicken(),
+    new SmallChicken(),
+    new SmallChicken(),
+    new Endboss(),
+  ];
 }
 
 /**

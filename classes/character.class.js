@@ -43,6 +43,32 @@ class Character extends MoveableObject {
     "img/2_character_pepe/5_dead/D-56.png",
   ];
 
+  IMAGES_IDLE = [
+    "img/2_character_pepe/1_idle/idle/I-1.png",
+    "img/2_character_pepe/1_idle/idle/I-2.png",
+    "img/2_character_pepe/1_idle/idle/I-3.png",
+    "img/2_character_pepe/1_idle/idle/I-4.png",
+    "img/2_character_pepe/1_idle/idle/I-5.png",
+    "img/2_character_pepe/1_idle/idle/I-6.png",
+    "img/2_character_pepe/1_idle/idle/I-7.png",
+    "img/2_character_pepe/1_idle/idle/I-8.png",
+    "img/2_character_pepe/1_idle/idle/I-9.png",
+    "img/2_character_pepe/1_idle/idle/I-10.png",
+  ];
+
+  IMAGES_SLEEPING = [
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+  ];
+
   IMAGES_HURT = [
     "img/2_character_pepe/4_hurt/H-41.png",
     "img/2_character_pepe/4_hurt/H-42.png",
@@ -50,6 +76,8 @@ class Character extends MoveableObject {
   ];
 
   WALKING_SOUND = new Audio("audio/yarzur_ofc-st3-footstep-sfx-323056.mp3");
+  lastActionTime = new Date().getTime();
+  slowAnimationTick = 0;
 
   /**
    * Loads all images, starts the gravity and the animation.
@@ -60,6 +88,8 @@ class Character extends MoveableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_SLEEPING);
     this.applyGravity();
     this.animate();
   }
@@ -90,6 +120,39 @@ class Character extends MoveableObject {
       this.playAnimation(this.IMAGES_JUMPING);
     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
       this.playAnimation(this.IMAGES_WALKING);
+    } else if (this.isSleeping()) {
+      this.playSlowAnimation(this.IMAGES_SLEEPING);
+    } else {
+      this.playSlowAnimation(this.IMAGES_IDLE);
+    }
+  }
+
+  /**
+   * Plays an animation 4 times slower than normal (one image every 200 ms instead of 50 ms).
+   * @param {string[]} images - Paths of the animation images.
+   */
+  playSlowAnimation(images) {
+    this.slowAnimationTick++;
+    if (this.slowAnimationTick % 4 == 0) {
+      this.playAnimation(images);
+    }
+  }
+
+  /**
+   * Checks if Pepe has done nothing for more than 10 seconds.
+   * @returns {boolean} True if Pepe falls asleep.
+   */
+  isSleeping() {
+    return new Date().getTime() - this.lastActionTime > 10000;
+  }
+
+  /**
+   * Remembers the time of the last key press, so Pepe only falls asleep when nothing happens.
+   */
+  rememberLastAction() {
+    let k = this.world.keyboard;
+    if (k.RIGHT || k.LEFT || k.UP || k.SPACE || k.D) {
+      this.lastActionTime = new Date().getTime();
     }
   }
 
@@ -98,6 +161,19 @@ class Character extends MoveableObject {
    */
   moveCharacter() {
     if (this.isDead()) return;
+    this.rememberLastAction();
+    this.walk();
+    this.world.camera_x = -this.x + 100;
+    let keyboard = this.world.keyboard;
+    if ((keyboard.UP || keyboard.SPACE) && !this.isAboveGround()) {
+      this.jump();
+    }
+  }
+
+  /**
+   * Moves Pepe to the right or to the left, but not out of the level.
+   */
+  walk() {
     let keyboard = this.world.keyboard;
     if (keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
@@ -106,10 +182,6 @@ class Character extends MoveableObject {
     if (keyboard.LEFT && this.x > 0) {
       this.moveLeft();
       this.playWalkingSound();
-    }
-    this.world.camera_x = -this.x + 100;
-    if ((keyboard.UP || keyboard.SPACE) && !this.isAboveGround()) {
-      this.jump();
     }
   }
 

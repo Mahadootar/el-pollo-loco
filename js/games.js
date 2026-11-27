@@ -1,12 +1,13 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let isMuted = false;
+let isMuted = localStorage.getItem("muted") === "true";
 let backgroundMusic = new Audio(
   "audio/foggysunrise-desert-music-loop-371877.mp3",
 );
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
+backgroundMusic.muted = isMuted;
 
 /**
  * Creates the game world on the canvas.
@@ -59,7 +60,8 @@ function isRealFullscreen() {
  * @param {HTMLElement} container - The element that should become fullscreen.
  */
 function requestRealFullscreen(container) {
-  let request = container.requestFullscreen || container.webkitRequestFullscreen;
+  let request =
+    container.requestFullscreen || container.webkitRequestFullscreen;
   let result = request.call(container);
   if (result) result.catch(() => {});
   setTimeout(() => {
@@ -73,9 +75,17 @@ function requestRealFullscreen(container) {
 function toggleSound() {
   isMuted = !isMuted;
   backgroundMusic.muted = isMuted;
+  localStorage.setItem("muted", isMuted);
   if (!isMuted && world) {
     backgroundMusic.play();
   }
+  updateSoundButton();
+}
+
+/**
+ * Shows 🔇 or 🔊 on the sound button, depending on isMuted.
+ */
+function updateSoundButton() {
   document.getElementById("soundBtn").innerText = isMuted ? "🔇" : "🔊";
 }
 
@@ -126,4 +136,7 @@ function bindTouchButtons() {
   });
 }
 
-window.addEventListener("DOMContentLoaded", bindTouchButtons);
+window.addEventListener("DOMContentLoaded", () => {
+  bindTouchButtons();
+  updateSoundButton();
+});

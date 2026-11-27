@@ -97,6 +97,7 @@ class Character extends MoveableObject {
    * Moves Pepe with the keyboard, lets him jump and moves the camera with him.
    */
   moveCharacter() {
+    if (this.isDead()) return;
     let keyboard = this.world.keyboard;
     if (keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();

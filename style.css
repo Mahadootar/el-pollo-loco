@@ -133,28 +133,6 @@ canvas {
   object-fit: contain;
 }
 
-/* CSS fullscreen for devices without real fullscreen (e.g. iPhone) */
-.game-container.pseudo-fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  aspect-ratio: auto;
-  z-index: 1000;
-  background-color: black;
-}
-
-.game-container.pseudo-fullscreen canvas,
-.game-container.pseudo-fullscreen .start-screen img {
-  object-fit: contain;
-}
-
-body:has(.pseudo-fullscreen) {
-  overflow: hidden;
-}
-
 /* ---------- Sound- und Vollbild-Button im Spiel (oben in der Mitte) ---------- */
 
 .game-buttons {

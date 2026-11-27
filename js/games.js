@@ -30,43 +30,16 @@ function startGame() {
 }
 
 /**
- * Turns the fullscreen mode of the game on or off.
- * Devices without real fullscreen (e.g. iPhone) get a CSS fullscreen instead.
+ * Turns the fullscreen mode of the game on or off (desktop only, the button is hidden on mobile).
+ * Uses the normal and the older "webkit" version, so it also works in older Safari.
  */
 function toggleFullscreen() {
   let container = document.getElementById("gameContainer");
-  if (isRealFullscreen()) {
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
     (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-  } else if (container.classList.contains("pseudo-fullscreen")) {
-    container.classList.remove("pseudo-fullscreen");
-  } else if (document.fullscreenEnabled || document.webkitFullscreenEnabled) {
-    requestRealFullscreen(container);
   } else {
-    container.classList.add("pseudo-fullscreen");
+    (container.requestFullscreen || container.webkitRequestFullscreen).call(container);
   }
-}
-
-/**
- * Checks if the browser shows something in real fullscreen at the moment.
- * @returns {boolean} True if real fullscreen is active.
- */
-function isRealFullscreen() {
-  return !!(document.fullscreenElement || document.webkitFullscreenElement);
-}
-
-/**
- * Asks the browser for real fullscreen. If it does not work, the CSS fullscreen is used.
- * Uses the normal and the older "webkit" version, so it also works in Safari on the iPad.
- * @param {HTMLElement} container - The element that should become fullscreen.
- */
-function requestRealFullscreen(container) {
-  let request =
-    container.requestFullscreen || container.webkitRequestFullscreen;
-  let result = request.call(container);
-  if (result) result.catch(() => {});
-  setTimeout(() => {
-    if (!isRealFullscreen()) container.classList.add("pseudo-fullscreen");
-  }, 300);
 }
 
 /**

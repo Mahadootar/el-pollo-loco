@@ -1,5 +1,5 @@
 /**
- * A small chicken that walks to the left. It dies when Pepe jumps on it or a bottle hits it.
+ * A normal, fast chicken that walks to the left. It dies when Pepe jumps on it or a bottle hits it.
  */
 class Chicken extends MoveableObject {
   y = 355;
@@ -22,7 +22,7 @@ class Chicken extends MoveableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.DEAD_CHICKEN);
     this.x = 600 + Math.random() * 600;
-    this.speed = 0.15 + Math.random() * 0.25;
+    this.speed = 0.5 + Math.random() * 0.5;
     this.animate();
   }
 

@@ -55,9 +55,9 @@ The game runs in the browser, no installation is needed.
 el-pollo-loco/
 ├── index.html            # page with canvas, start/end screen and controls
 ├── style.css             # layout, buttons, fullscreen and mobile styles
-├── js/games.js           # start, keyboard, touch buttons, sound, fullscreen
+├── script.js             # start, keyboard, touch buttons, sound, fullscreen
 ├── levels/level1.js      # enemies, coins and bottles of level 1
-├── models/               # one class per file
+├── classes/              # one class per file
 │   ├── drawable-object.class.js   # everything that can be drawn
 │   ├── moveable.class.js          # movement, gravity, damage, collision
 │   ├── character.class.js         # Pepe

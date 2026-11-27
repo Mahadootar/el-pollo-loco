@@ -291,6 +291,64 @@ kbd {
   }
 }
 
+/* ---------- Impressum: Link und eigene Seite ---------- */
+
+.impressum-link,
+.help-impressum {
+  color: white;
+  font-family: sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.impressum-link {
+  margin-top: 8px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.help-impressum {
+  display: inline-block;
+  margin-top: 16px;
+  color: #3a2a12;
+}
+
+.legal-page {
+  width: min(720px, 90vw);
+  margin: 24px auto;
+  padding: 24px 32px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  background-color: #fff3dc;
+  color: #3a2a12;
+}
+
+.legal-page h1 {
+  margin-top: 8px;
+}
+
+.legal-page h2 {
+  margin: 20px 0 6px;
+  font-size: 20px;
+}
+
+.legal-page p {
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.5;
+}
+
+.legal-note {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f5d9a8;
+}
+
+.back-link {
+  color: #3a2a12;
+  font-family: sans-serif;
+  cursor: pointer;
+}
+
 /* ---------- Hinweis im Hochformat: "Gerät drehen" ---------- */
 
 .rotate-screen {
@@ -363,8 +421,13 @@ kbd {
 /* ---------- Handy quer (niedriger Bildschirm) ---------- */
 
 @media only screen and (max-height: 480px) {
-  h1 {
+  h1,
+  .impressum-link {
     display: none;
+  }
+
+  .legal-page h1 {
+    display: block;
   }
 
   .game-container {

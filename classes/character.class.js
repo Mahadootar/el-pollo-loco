@@ -112,6 +112,7 @@ class Character extends MoveableObject {
    * Chooses the right animation: dead, hurt, jumping or walking.
    */
   playCharAnimation() {
+    this.updateSnoring();
     if (this.isDead()) {
       this.playAnimation(this.IMAGES_DEAD);
     } else if (this.isHurt()) {
@@ -124,6 +125,17 @@ class Character extends MoveableObject {
       this.playSlowAnimation(this.IMAGES_SLEEPING);
     } else {
       this.playSlowAnimation(this.IMAGES_IDLE);
+    }
+  }
+
+  /**
+   * Pepe snores while he is sleeping. When he wakes up, the snoring stops.
+   */
+  updateSnoring() {
+    if (this.isSleeping() && !this.isDead()) {
+      startLoopSound("snoring");
+    } else {
+      stopLoopSound("snoring");
     }
   }
 
@@ -165,8 +177,10 @@ class Character extends MoveableObject {
     this.walk();
     this.world.camera_x = -this.x + 100;
     let keyboard = this.world.keyboard;
-    if ((keyboard.UP || keyboard.SPACE) && !this.isAboveGround()) {
+    let wantsToJump = keyboard.UP || keyboard.SPACE;
+    if (wantsToJump && !this.isAboveGround() && this.speedY <= 0) {
       this.jump();
+      playSound("jump");
     }
   }
 

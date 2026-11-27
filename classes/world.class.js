@@ -105,6 +105,7 @@ class World {
       this.throwableObjects.push(bottle);
       this.collectedBottles--;
       this.updateBottleBar();
+      playSound("throw");
     }
   }
 
@@ -131,6 +132,7 @@ class World {
     ) {
       enemy.energy = 0;
       this.removeDeadEnemy(enemy, 1000);
+      playSound("chickenDead");
     } else if (!this.character.isHurt()) {
       this.characterGetHit(enemy);
     }
@@ -144,6 +146,7 @@ class World {
     let damage = enemy instanceof Endboss ? 20 : 5;
     this.character.hit(damage);
     this.healthBar.setPercentage(this.character.energy);
+    playSound("hurt");
     if (this.character.isDead()) {
       this.gameLost();
     }
@@ -182,9 +185,11 @@ class World {
    * @param {MoveableObject} enemy - The enemy that is hit.
    */
   handleBottleHit(bottle, enemy) {
+    playSound("bottleBreak");
     if (enemy instanceof Chicken) {
       enemy.energy = 0;
       this.removeDeadEnemy(enemy, 1000);
+      playSound("chickenDead");
     } else {
       this.endbossGetHit(enemy);
     }
@@ -199,6 +204,7 @@ class World {
   endbossGetHit(endboss) {
     endboss.hit(20);
     this.endbossBar.setPercentage(endboss.energy);
+    playSound("endbossHit");
     if (endboss.isDead()) {
       this.removeDeadEnemy(endboss, 3000);
       this.gameWon();
@@ -223,6 +229,7 @@ class World {
         if (this.character.isColliding(coin)) {
           this.collectedCoins++;
           this.level.coins.splice(index, 1);
+          playSound("coin");
           this.coinBar.setPercentage(
             (this.collectedCoins / this.totalCoins) * 100,
           );
@@ -241,6 +248,7 @@ class World {
           this.collectedBottles++;
           this.level.bottles.splice(index, 1);
           this.updateBottleBar();
+          playSound("pickup");
         }
       });
     }, 100);
@@ -304,23 +312,25 @@ class World {
    * Ends the game with the "You lost" screen.
    */
   gameLost() {
-    this.endGame("img/You won, you lost/You lost.png");
+    this.endGame("img/You won, you lost/You lost.png", "lose");
   }
 
   /**
    * Ends the game with the "You won" screen.
    */
   gameWon() {
-    this.endGame("img/You won, you lost/You won A.png");
+    this.endGame("img/You won, you lost/You won A.png", "win");
   }
 
   /**
-   * Waits a moment, stops the game and shows the end screen.
+   * Waits a moment, stops the game, plays the end sound and shows the end screen.
    * @param {string} imagePath - Path to the image of the end screen.
+   * @param {string} soundName - Name of the sound for the end ("win" or "lose").
    */
-  endGame(imagePath) {
+  endGame(imagePath, soundName) {
     setTimeout(() => {
       stopGame();
+      playSound(soundName);
       document.getElementById("endScreenImg").src = imagePath;
       document.getElementById("endScreen").classList.remove("d-none");
     }, 1500);

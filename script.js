@@ -10,6 +10,29 @@ backgroundMusic.loop = true;
 backgroundMusic.volume = 0.3;
 backgroundMusic.muted = isMuted;
 
+/** Name of a sound → [file, volume from 0 to 1]. */
+const SOUND_FILES = {
+  jump: ["audio/dragon-studio-cartoon-jump-463196.mp3", 0.4],
+  coin: ["audio/yodguard-coin-collect-3-540190.mp3", 0.4],
+  pickup: ["audio/freesound_community-item-pickup-37089.mp3", 0.5],
+  throw: ["audio/denielcz-bamboo-whoosh-429156.mp3", 0.5],
+  bottleBreak: ["audio/dragon-studio-glass-breaking-511313.mp3", 0.4],
+  chickenDead: ["audio/freesound_community-chicken-single-alarm-call-6056.mp3", 0.5],
+  endbossHit: ["audio/soundzee-angry-chicken-cluck-fx-356746.mp3", 0.6],
+  hurt: ["audio/cookiecheese-hurt-sound-531758.mp3", 0.5],
+  snoring: ["audio/snoring-331163.mp3", 0.4],
+  win: ["audio/eaglaxle-gaming-victory-464016.mp3", 0.5],
+  lose: ["audio/mori_sound-fx-loose-cartoon-521523.mp3", 0.5],
+};
+
+/** Long sound files are stopped after this time (in milliseconds). */
+const SOUND_MAX_DURATION = {
+  endbossHit: 1500,
+  bottleBreak: 1200,
+};
+
+let sounds = createSounds();
+
 /**
  * Creates the game world on the canvas.
  */
@@ -54,6 +77,63 @@ function stopGame() {
     world.character.WALKING_SOUND.pause();
   }
   backgroundMusic.pause();
+  stopAllSounds();
+}
+
+/**
+ * Creates an Audio object with the right volume for every entry in SOUND_FILES.
+ * @returns {Object<string, HTMLAudioElement>} Name of the sound → Audio object.
+ */
+function createSounds() {
+  let result = {};
+  Object.entries(SOUND_FILES).forEach(([name, [file, volume]]) => {
+    result[name] = new Audio(file);
+    result[name].volume = volume;
+  });
+  return result;
+}
+
+/**
+ * Plays a short sound from the beginning, unless the sound is muted.
+ * Long files are stopped after the time in SOUND_MAX_DURATION.
+ * @param {string} name - Name of the sound, e.g. "jump".
+ */
+function playSound(name) {
+  if (isMuted) return;
+  let sound = sounds[name];
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+  clearTimeout(sound.stopTimer);
+  if (SOUND_MAX_DURATION[name]) {
+    sound.stopTimer = setTimeout(() => sound.pause(), SOUND_MAX_DURATION[name]);
+  }
+}
+
+/**
+ * Plays a sound again and again (e.g. snoring), unless the sound is muted.
+ * @param {string} name - Name of the sound.
+ */
+function startLoopSound(name) {
+  let sound = sounds[name];
+  sound.loop = true;
+  if (!isMuted && sound.paused) {
+    sound.play().catch(() => {});
+  }
+}
+
+/**
+ * Stops a sound that is played again and again.
+ * @param {string} name - Name of the sound.
+ */
+function stopLoopSound(name) {
+  sounds[name].pause();
+}
+
+/**
+ * Stops all sound effects.
+ */
+function stopAllSounds() {
+  Object.values(sounds).forEach((sound) => sound.pause());
 }
 
 /**
@@ -94,7 +174,9 @@ function toggleSound() {
   isMuted = !isMuted;
   backgroundMusic.muted = isMuted;
   localStorage.setItem("muted", isMuted);
-  if (!isMuted && world) {
+  if (isMuted) {
+    stopAllSounds();
+  } else if (world) {
     backgroundMusic.play();
   }
   updateSoundButton();

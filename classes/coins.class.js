@@ -26,8 +26,8 @@ class Coins extends MoveableObject {
    * Starts the pulsing and the image animation.
    */
   animate() {
-    setInterval(() => this.pulse(), 30);
-    setInterval(() => this.playAnimation(this.IMAGES_COINS), 100);
+    setStoppableInterval(() => this.pulse(), 30);
+    setStoppableInterval(() => this.playAnimation(this.IMAGES_COINS), 100);
   }
 
   /**

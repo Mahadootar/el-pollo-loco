@@ -1,6 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let intervalIds = [];
 let isMuted = localStorage.getItem("muted") === "true";
 let backgroundMusic = new Audio(
   "audio/foggysunrise-desert-music-loop-371877.mp3",
@@ -24,9 +25,53 @@ function startGame() {
   document.getElementById("startScreen").classList.add("d-none");
   initLevel();
   init();
+  backgroundMusic.currentTime = 0;
   if (!isMuted) {
     backgroundMusic.play();
   }
+}
+
+/**
+ * Works like setInterval, but remembers the interval, so stopGame() can stop it later.
+ * @param {Function} fn - The function that is called again and again.
+ * @param {number} time - Time between two calls in milliseconds.
+ * @returns {number} The id of the interval.
+ */
+function setStoppableInterval(fn, time) {
+  let id = setInterval(fn, time);
+  intervalIds.push(id);
+  return id;
+}
+
+/**
+ * Stops the whole game: all intervals, the drawing loop and all sounds.
+ */
+function stopGame() {
+  intervalIds.forEach((id) => clearInterval(id));
+  intervalIds = [];
+  if (world) {
+    cancelAnimationFrame(world.animationFrame);
+    world.character.WALKING_SOUND.pause();
+  }
+  backgroundMusic.pause();
+}
+
+/**
+ * Hides the end screen and starts a new game, without reloading the page.
+ */
+function restartGame() {
+  stopGame();
+  document.getElementById("endScreen").classList.add("d-none");
+  startGame();
+}
+
+/**
+ * Leaves the game and goes back to the start screen.
+ */
+function goHome() {
+  stopGame();
+  document.getElementById("endScreen").classList.add("d-none");
+  document.getElementById("startScreen").classList.remove("d-none");
 }
 
 /**

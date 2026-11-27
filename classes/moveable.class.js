@@ -19,7 +19,7 @@ class MoveableObject extends DrawableObject {
    * Starts the gravity: the object falls down until it reaches the ground.
    */
   applyGravity() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;

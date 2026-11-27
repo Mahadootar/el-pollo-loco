@@ -60,7 +60,10 @@
       </div>
       <div id="endScreen" class="end-screen d-none">
         <img src="" id="endScreenImg" alt="Spielende" />
-        <button onclick="location.reload()">Nochmal spielen</button>
+        <div class="end-buttons">
+          <button onclick="restartGame()">Nochmal spielen</button>
+          <button onclick="goHome()">Startbildschirm</button>
+        </div>
       </div>
       <div class="game-buttons">
         <button class="game-btn" onclick="openHelp()" aria-label="Spielanleitung">

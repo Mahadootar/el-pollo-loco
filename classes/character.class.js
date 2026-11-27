@@ -68,12 +68,12 @@ class Character extends MoveableObject {
    * Starts the movement (60 times per second) and the image animation (20 times per second).
    */
   animate() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.WALKING_SOUND.pause();
       this.moveCharacter();
     }, 1000 / 60);
 
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.playCharAnimation();
     }, 50);
   }

@@ -72,11 +72,11 @@ class Endboss extends MoveableObject {
    * Starts the image animation and the movement.
    */
   animate() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.playEndbossAnimation();
     }, 100);
 
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.moveEndboss();
     }, 1000 / 60);
   }

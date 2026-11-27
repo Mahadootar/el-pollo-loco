@@ -55,10 +55,7 @@ class World {
     this.ctx.translate(-this.camera_x, 0);
     this.drawStatusBars();
 
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
+    this.animationFrame = requestAnimationFrame(() => this.draw());
   }
 
   /**
@@ -87,12 +84,12 @@ class World {
    * Starts the checks for enemies and bottles.
    */
   run() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.checkCollisions();
       this.checkBottleHits();
       this.removeFallenBottles();
     }, 50);
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.checkThrowableObject();
     }, 200);
   }
@@ -221,7 +218,7 @@ class World {
    * Checks if Pepe collects a coin.
    */
   checkCoinCollision() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.level.coins.forEach((coin, index) => {
         if (this.character.isColliding(coin)) {
           this.collectedCoins++;
@@ -238,7 +235,7 @@ class World {
    * Checks if Pepe collects a bottle from the ground.
    */
   checkBottleCollision() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.level.bottles.forEach((bottle, index) => {
         if (this.character.isColliding(bottle)) {
           this.collectedBottles++;
@@ -323,19 +320,9 @@ class World {
    */
   endGame(imagePath) {
     setTimeout(() => {
-      this.stopGame();
-      backgroundMusic.pause();
+      stopGame();
       document.getElementById("endScreenImg").src = imagePath;
       document.getElementById("endScreen").classList.remove("d-none");
     }, 1500);
-  }
-
-  /**
-   * Stops all intervals, so nothing moves anymore.
-   */
-  stopGame() {
-    for (let i = 1; i < 9999; i++) {
-      clearInterval(i);
-    }
   }
 }

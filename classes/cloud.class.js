@@ -19,7 +19,7 @@ class Cloud extends MoveableObject {
    * Moves the cloud slowly to the left.
    */
   animate() {
-    setInterval(() => {
+    setStoppableInterval(() => {
       this.x -= this.speed;
     }, 1000 / 60);
   }

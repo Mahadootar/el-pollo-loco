@@ -24,7 +24,7 @@ class ThrowableObject extends MoveableObject {
   throw() {
     this.speedY = 10;
     this.applyGravity();
-    setInterval(() => {
+    setStoppableInterval(() => {
       if (this.toLeft) {
         this.x -= 5;
       } else {

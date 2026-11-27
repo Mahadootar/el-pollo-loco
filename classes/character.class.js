@@ -118,7 +118,7 @@ class Character extends MoveableObject {
     } else if (this.isHurt()) {
       this.playAnimation(this.IMAGES_HURT);
     } else if (this.isAboveGround()) {
-      this.playAnimation(this.IMAGES_JUMPING);
+      this.showJumpImage();
     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
       this.playAnimation(this.IMAGES_WALKING);
     } else if (this.isSleeping()) {
@@ -137,6 +137,17 @@ class Character extends MoveableObject {
     } else {
       stopLoopSound("snoring");
     }
+  }
+
+  /**
+   * Shows the jump image that fits the current moment of the jump, so the 9 images
+   * are shown exactly once per jump: speedY 20 = take off, 0 = top, -20 = landing.
+   */
+  showJumpImage() {
+    let progress = (20 - this.speedY) / 40;
+    let index = Math.round(progress * 8);
+    index = Math.min(8, Math.max(0, index));
+    this.img = this.imageCache[this.IMAGES_JUMPING[index]];
   }
 
   /**
